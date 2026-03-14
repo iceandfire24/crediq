@@ -1,36 +1,43 @@
 # Dependencies
 node_modules/
-bower_components/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Build outputs
-dist/
-build/
-out/
-*.log
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# IDE
+# IDE and Editor Files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+.project
+.classpath
+.settings/
 
-# OS
-.DS_Store
-Thumbs.db
+# Build and Distribution
+dist/
+build/
+*.log
 
-# Testing
+# Environment Files
+.env
+.env.local
+.env.*.local
+
+# Test Coverage
 coverage/
 .nyc_output/
 
-# Temporary files
+# Temporary Files
 *.tmp
 *.temp
 .cache/
-
-# Keep .kiro folder tracked (it's not ignored)

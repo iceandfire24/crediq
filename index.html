@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Offline-first card manager with client-side encryption">
+    <meta name="description" content="Offline-first card manager for secure local storage of credit and debit card information">
     <title>Card Manager</title>
-    
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/themes.css">
     <link rel="stylesheet" href="css/layouts.css">
     <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
-    <!-- App Container -->
     <div id="app">
         <!-- Navigation will be injected here -->
         <nav id="navigation"></nav>
         
-        <!-- Main Content Area -->
-        <main id="content"></main>
+        <!-- Main content area -->
+        <main id="main-content">
+            <!-- Views will be rendered here -->
+        </main>
     </div>
 
     <!-- Scripts -->
-    <script src="js/config.js"></script>
-    <script src="js/app.js" type="module"></script>
+    <script type="module" src="js/config.js"></script>
+    <script type="module" src="js/app.js"></script>
 </body>
 </html>

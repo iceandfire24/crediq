@@ -16,7 +16,7 @@ This implementation plan breaks down the Card Manager application into beginner-
   - _Requirements: 5.4, 11.1, 13.1, 13.2_
 
 - [ ] 2. Implement data models and core utilities
-  - [ ] 2.1 Create Card model class (js/models/card.js)
+  - [x] 2.1 Create Card model class (js/models/card.js)
     - Implement Card class with all properties (id, name, number, cvv, expiry, etc.)
     - Add computed properties (maskedNumber, age, isExpired, isExpiringSoon)
     - Add validate() and toJSON() methods
@@ -27,12 +27,12 @@ This implementation plan breaks down the Card Manager application into beginner-
     - **Property 12: Card Age Calculation**
     - **Validates: Requirements 1.9, 2.5, 5.1, 5.2, 5.3**
 
-  - [ ] 2.3 Create AppConfig model class (js/models/config.js)
+  - [x] 2.3 Create AppConfig model class (js/models/config.js)
     - Implement AppConfig class with theme, dateFormat, and bankColors properties
     - Add toJSON() method
     - _Requirements: 11.1, 12.1_
 
-  - [ ] 2.4 Create utility functions file (js/utils.js)
+  - [x] 2.4 Create utility functions file (js/utils.js)
     - Implement UUID generation function
     - Implement date formatting functions for different formats
     - Implement number formatting functions

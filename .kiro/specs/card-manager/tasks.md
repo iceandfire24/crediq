@@ -6,7 +6,7 @@ This implementation plan breaks down the Card Manager application into beginner-
 
 ## Tasks
 
-- [ ] 1. Project setup and file structure
+- [x] 1. Project setup and file structure
   - Create the project directory structure (css/, js/, assets/, data/ folders)
   - Create index.html with semantic HTML5 structure and navigation placeholders
   - Create main.css with CSS custom properties for light/dark themes

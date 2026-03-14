@@ -1,18 +1,43 @@
-/* Layout Styles - Responsive layouts and navigation */
+/* Layout Styles - Responsive Layouts */
 
 /* Mobile-first base styles (0-479px) */
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-/* Tablet styles (480px-767px) */
+#navigation {
+  order: 2;
+}
+
+#main-content {
+  order: 1;
+  flex: 1;
+  padding: var(--spacing-md);
+}
+
+/* Tablet breakpoint (480px-767px) */
 @media (min-width: 480px) {
-    
+  #main-content {
+    padding: var(--spacing-lg);
+  }
 }
 
-/* Desktop styles (768px+) */
+/* Desktop breakpoint (768px+) */
 @media (min-width: 768px) {
-    
-}
-
-/* Large desktop styles (1024px+) */
-@media (min-width: 1024px) {
-    
+  #app {
+    flex-direction: row;
+  }
+  
+  #navigation {
+    order: 1;
+    width: 250px;
+  }
+  
+  #main-content {
+    order: 2;
+    flex: 1;
+    padding: var(--spacing-xl);
+  }
 }

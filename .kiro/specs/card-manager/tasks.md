@@ -32,7 +32,7 @@ This implementation plan breaks down the Card Manager application into beginner-
     - Add toJSON() method
     - _Requirements: 11.1, 12.1_
 
-  - [ ] 2.4 Create utility functions file (js/utils.js)
+  - [x] 2.4 Create utility functions file (js/utils.js)
     - Implement UUID generation function
     - Implement date formatting functions for different formats
     - Implement number formatting functions

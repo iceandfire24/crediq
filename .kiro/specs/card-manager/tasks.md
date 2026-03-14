@@ -27,7 +27,7 @@ This implementation plan breaks down the Card Manager application into beginner-
     - **Property 12: Card Age Calculation**
     - **Validates: Requirements 1.9, 2.5, 5.1, 5.2, 5.3**
 
-  - [ ] 2.3 Create AppConfig model class (js/models/config.js)
+  - [x] 2.3 Create AppConfig model class (js/models/config.js)
     - Implement AppConfig class with theme, dateFormat, and bankColors properties
     - Add toJSON() method
     - _Requirements: 11.1, 12.1_

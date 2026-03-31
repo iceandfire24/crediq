@@ -166,7 +166,7 @@ This implementation plan breaks down the Card Manager application into increment
     - **Validates: Requirements 4.2, 4.3, 4.4, 10.3**
 
 - [ ] 10. Implement card controller
-  - [ ] 10.1 Create card controller (js/controllers/cardController.js)
+  - [x] 10.1 Create card controller (js/controllers/cardController.js)
     - Implement getAllCards(), getCardById(id)
     - Implement addCard(cardData) with validation and network/bank detection
     - Implement updateCard(id, cardData) with validation

@@ -58,8 +58,8 @@ This implementation plan breaks down the Card Manager application into increment
     - **Property 14: Edit Validation Consistency**
     - **Validates: Requirements 1.1-1.8, 1.12, 3.1**
 
-- [ ] 4. Implement encryption service
-  - [ ] 4.1 Create encryption service (js/services/encryption.js)
+- [x] 4. Implement encryption service
+  - [x] 4.1 Create encryption service (js/services/encryption.js)
     - Implement deriveKey() using Web Crypto API PBKDF2
     - Implement encrypt() using AES-GCM
     - Implement decrypt() using AES-GCM
@@ -70,7 +70,7 @@ This implementation plan breaks down the Card Manager application into increment
     - Implement encryptExport(data, password) and decryptImport(encryptedData, password)
     - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 15.1, 15.2, 15.3, 15.4, 15.5, 15.6_
 
-  - [ ]* 4.2 Write property tests for encryption service
+  - [x] 4.2 Write property tests for encryption service
     - **Property 21: Encryption Irreversibility Without Key**
     - **Property 24: Incorrect Password Rejection**
     - **Property 43: Encryption Round Trip**

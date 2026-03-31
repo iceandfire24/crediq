@@ -179,20 +179,20 @@ This implementation plan breaks down the Card Manager application into increment
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 12. Implement client-side routing and CSS foundation
-  - [ ] 12.1 Create router (js/router.js)
+  - [x] 12.1 Create router (js/router.js)
     - Implement hash-based routing (#/cards, #/add, #/card/:id, #/calendar, #/stats, #/settings, #/about)
     - Implement route registration, navigation, and parameter extraction
     - Add browser history support
     - _Requirements: 13.1, 13.2_
 
-  - [ ] 12.2 Create theme and layout styles (css/themes.css, css/layouts.css)
+  - [x] 12.2 Create theme and layout styles (css/themes.css, css/layouts.css)
     - Define CSS custom properties for light and dark themes
     - Implement mobile-first responsive layouts with breakpoints (480px, 768px, 1024px)
     - Implement mobile bottom navigation bar and desktop sidebar navigation
     - Ensure touch-friendly targets (44x44px minimum)
     - _Requirements: 11.1, 11.2, 11.3, 13.1, 13.2, 13.3, 13.4, 13.5_
 
-  - [ ] 12.3 Create component styles (css/components.css)
+  - [x] 12.3 Create component styles (css/components.css)
     - Style buttons (primary, secondary, danger), form inputs and validation states
     - Style card grid items, modals, toast notifications, and loading indicators
     - Style navigation elements with consistent spacing and typography

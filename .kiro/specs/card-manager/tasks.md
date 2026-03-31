@@ -138,27 +138,27 @@ This implementation plan breaks down the Card Manager application into increment
     - **Property 29: Average Age Calculation**
     - **Validates: Requirements 7.1, 7.2, 7.3, 7.4, 7.6, 16.3, 16.4**
 
-- [ ] 9. Implement reminder and search controllers
-  - [ ] 9.1 Create reminder controller (js/controllers/reminderController.js)
+- [x] 9. Implement reminder and search controllers
+  - [x] 9.1 Create reminder controller (js/controllers/reminderController.js)
     - Implement getUpcomingReminders(), calculateNextDueDate(card), shouldShowReminder(card, dueDate)
     - Implement getRemindersForDate(date) and updateStatementCycle(card)
     - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 8.7, 8.8_
 
-  - [ ]* 9.2 Write property tests for reminder controller
+  - [x]* 9.2 Write property tests for reminder controller
     - **Property 30: Next Due Date Calculation**
     - **Property 31: Reminder Filtering by Notification Status**
     - **Property 32: Reminder Filtering by Period**
     - **Property 33: Reminder Sort Order**
     - **Validates: Requirements 8.4, 8.5, 8.6, 8.7, 8.8**
 
-  - [ ] 9.3 Create search controller (js/controllers/searchController.js)
+  - [x] 9.3 Create search controller (js/controllers/searchController.js)
     - Implement searchCards(query, cards) filtering by name, bank, or network
     - Implement filterByNetwork(), filterByBank(), filterByTag()
     - Implement sortCards(sortBy, cards) for name, expiry, or age
     - Implement combineFilters() to apply multiple filters simultaneously
     - _Requirements: 4.2, 4.3, 4.4, 4.5_
 
-  - [ ]* 9.4 Write property tests for search controller
+  - [x]* 9.4 Write property tests for search controller
     - **Property 18: Search Filter Accuracy**
     - **Property 19: Sort Order Correctness**
     - **Property 20: Filter Accuracy**

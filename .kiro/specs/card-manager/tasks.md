@@ -78,8 +78,8 @@ This implementation plan breaks down the Card Manager application into increment
     - **Property 23: Export-Import Round Trip**
     - **Validates: Requirements 6.2, 6.3, 6.5, 6.6, 6.7, 15.2, 15.3, 15.6**
 
-- [ ] 5. Implement card detection service
-  - [ ] 5.1 Create detector service (js/services/detector.js)
+- [x] 5. Implement card detection service
+  - [x] 5.1 Create detector service (js/services/detector.js)
     - Define NETWORK_PATTERNS object with regex for Visa, Mastercard, Amex, RuPay, Diners, Discover
     - Define BANK_BINS object with BIN ranges for Indian banks
     - Implement detectNetwork() function
@@ -88,7 +88,7 @@ This implementation plan breaks down the Card Manager application into increment
     - Implement getBankColor() function with default colors
     - _Requirements: 1.10, 1.11, 17.1, 17.2, 17.3, 17.4, 17.7, 17.11_
 
-  - [ ]* 5.2 Write property tests for detector service
+  - [x] 5.2 Write property tests for detector service
     - **Property 7: Network Detection Accuracy**
     - **Property 8: Bank Detection Accuracy**
     - **Property 53: Placeholder Logo Fallback**

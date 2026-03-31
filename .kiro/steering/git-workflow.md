@@ -68,6 +68,17 @@ git commit -m "feat(validator): implement luhn check and form validation service
 git push -u origin <branch-name>
 ```
 
+## Step 6: After PR is Merged
+
+Once the user confirms the PR has been merged, switch back to the base branch and pull the latest changes:
+
+```bash
+git checkout <base-branch>
+git pull origin <base-branch>
+```
+
+The base branch defaults to `main`, but use whatever branch the feature branch was based off — commonly `main`, `master`, or `dev`. If unsure, ask the user before proceeding.
+
 ## Full Command Sequence Example
 
 ```bash
@@ -75,6 +86,10 @@ git checkout -b feat/validator-service
 git add -A
 git commit -m "feat(validator): implement luhn check and form validation service"
 git push -u origin feat/validator-service
+
+# After PR is merged:
+git checkout dev
+git pull origin dev
 ```
 
 ## Notes
@@ -83,3 +98,4 @@ git push -u origin feat/validator-service
 - If there are multiple tasks completed since the last PR, group them under a single branch that reflects the overall theme.
 - If unsure about the branch name, ask the user before proceeding.
 - Do not force-push unless explicitly asked.
+- After syncing `main`, the repo is ready for the next feature branch.

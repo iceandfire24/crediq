@@ -37,8 +37,8 @@ This implementation plan breaks down the Card Manager application into increment
     - Implement number formatting functions
     - _Requirements: 12.1, 12.2_
 
-- [ ] 3. Implement validation service
-  - [ ] 3.1 Create validator service (js/services/validator.js)
+- [x] 3. Implement validation service
+  - [x] 3.1 Create validator service (js/services/validator.js)
     - Implement luhnCheck() function for card number validation
     - Implement validateCardNumber() function
     - Implement validateCVV() function (3-4 digits)
@@ -48,7 +48,7 @@ This implementation plan breaks down the Card Manager application into increment
     - Implement validateForm() function that combines all validations
     - _Requirements: 1.5, 1.6, 1.7, 1.8, 3.1_
 
-  - [ ]* 3.2 Write property tests for validator service
+  - [x] 3.2 Write property tests for validator service
     - **Property 1: Required Field Validation**
     - **Property 2: Luhn Algorithm Validation**
     - **Property 3: Future Expiry Date Validation**

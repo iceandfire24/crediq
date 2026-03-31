@@ -95,25 +95,25 @@ This implementation plan breaks down the Card Manager application into increment
     - **Validates: Requirements 1.10, 1.11, 17.11**
 
 - [ ] 6. Implement local storage services
-  - [ ] 6.1 Create card store service (js/services/cardStore.js)
+  - [x] 6.1 Create card store service (js/services/cardStore.js)
     - Implement getAllCards(), getCardById(id), addCard(card), updateCard(id, card), deleteCard(id)
     - Implement encryptSensitiveFields(card) and decryptSensitiveFields(card)
     - Implement generateId() using UUID
     - _Requirements: 1.9, 3.3, 3.5, 5.1, 5.2, 5.3, 15.2, 15.3_
 
-  - [ ]* 6.2 Write property tests for card store service
+  - [x] 6.2 Write property tests for card store service
     - **Property 6: Card Storage Round Trip**
     - **Property 15: Card Update Persistence**
     - **Property 16: Card Deletion Completeness**
     - **Validates: Requirements 1.9, 3.3, 3.5, 5.1, 5.2, 5.3**
 
-  - [ ] 6.3 Create config store service (js/services/configStore.js)
+  - [x] 6.3 Create config store service (js/services/configStore.js)
     - Implement getConfig(), saveConfig(config)
     - Implement getTheme(), saveTheme(theme), getDateFormat(), saveDateFormat(format)
     - Implement getBankColors(), saveBankColor(bank, color)
     - _Requirements: 11.4, 11.5, 12.3, 12.4, 17.9, 17.10_
 
-  - [ ]* 6.4 Write property tests for config store service
+  - [x] 6.4 Write property tests for config store service
     - **Property 40: Theme Persistence Round Trip**
     - **Property 42: Date Format Persistence Round Trip**
     - **Property 52: Bank Color Persistence Round Trip**

@@ -123,14 +123,14 @@ This implementation plan breaks down the Card Manager application into increment
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 8. Implement statistics service
-  - [ ] 8.1 Create statistics service (js/services/statistics.js)
+  - [x] 8.1 Create statistics service (js/services/statistics.js)
     - Implement calculateOverallStats() for total cards, fees, credit limits
     - Implement calculateNetworkStats() and calculateBankStats()
     - Implement calculateTotalCreditLimit() with shared limit deduplication
     - Implement calculateAverageAge() and findExpiringCards(months)
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.6, 16.3, 16.4_
 
-  - [ ]* 8.2 Write property tests for statistics service
+  - [x] 8.2 Write property tests for statistics service
     - **Property 25: Card Count Accuracy**
     - **Property 26: Annual Fee Sum Accuracy**
     - **Property 27: Shared Limit Deduplication**

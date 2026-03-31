@@ -175,7 +175,7 @@ This implementation plan breaks down the Card Manager application into increment
     - Emit custom events for card changes (card-added, card-updated, card-deleted)
     - _Requirements: 1.9, 1.10, 1.11, 3.1, 3.2, 3.3, 3.4, 3.5, 16.1, 16.6_
 
-- [ ] 11. Checkpoint - Ensure all tests pass
+- [x] 11. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 12. Implement client-side routing and CSS foundation

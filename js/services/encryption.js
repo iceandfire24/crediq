@@ -50,18 +50,27 @@ class EncryptionService {
    * @returns {Promise<string>} Base64-encoded IV + ciphertext
    */
   async encrypt(plaintext, key) {
-    const enc = new TextEncoder();
-    const iv = crypto.getRandomValues(new Uint8Array(12));
-    const ciphertext = await crypto.subtle.encrypt(
-      { name: 'AES-GCM', iv },
-      key,
-      enc.encode(plaintext)
-    );
-    // Prepend IV to ciphertext
-    const combined = new Uint8Array(iv.byteLength + ciphertext.byteLength);
-    combined.set(iv, 0);
-    combined.set(new Uint8Array(ciphertext), iv.byteLength);
-    return btoa(String.fromCharCode(...combined));
+    try {
+      const enc = new TextEncoder();
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const ciphertext = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv },
+        key,
+        enc.encode(plaintext)
+      );
+      // Prepend IV to ciphertext
+      const combined = new Uint8Array(iv.byteLength + ciphertext.byteLength);
+      combined.set(iv, 0);
+      combined.set(new Uint8Array(ciphertext), iv.byteLength);
+      return btoa(String.fromCharCode(...combined));
+    } catch (err) {
+      if (err instanceof DOMException) {
+        const e = new Error('Encryption failed. Please check your master password.');
+        e.name = 'EncryptionError';
+        throw e;
+      }
+      throw err;
+    }
   }
 
   /**
@@ -71,15 +80,24 @@ class EncryptionService {
    * @returns {Promise<string>} Decrypted plaintext
    */
   async decrypt(ciphertext, key) {
-    const combined = Uint8Array.from(atob(ciphertext), c => c.charCodeAt(0));
-    const iv = combined.slice(0, 12);
-    const data = combined.slice(12);
-    const decrypted = await crypto.subtle.decrypt(
-      { name: 'AES-GCM', iv },
-      key,
-      data
-    );
-    return new TextDecoder().decode(decrypted);
+    try {
+      const combined = Uint8Array.from(atob(ciphertext), c => c.charCodeAt(0));
+      const iv = combined.slice(0, 12);
+      const data = combined.slice(12);
+      const decrypted = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv },
+        key,
+        data
+      );
+      return new TextDecoder().decode(decrypted);
+    } catch (err) {
+      if (err instanceof DOMException) {
+        const e = new Error('Decryption failed. The data may be corrupted or the key is incorrect.');
+        e.name = 'EncryptionError';
+        throw e;
+      }
+      throw err;
+    }
   }
 
   /**
@@ -143,24 +161,36 @@ class EncryptionService {
    * @throws {Error} If password is incorrect
    */
   async verifyMasterPassword(password) {
-    const saltB64 = localStorage.getItem(STORAGE_KEYS.SALT);
-    if (!saltB64) throw new Error('No master password set');
-
-    const salt = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
-    const key = await this.deriveKey(password, salt);
-
-    const verifyToken = localStorage.getItem(STORAGE_KEYS.VERIFY);
-    if (!verifyToken) throw new Error('Verification token missing');
-
     try {
-      const decrypted = await this.decrypt(verifyToken, key);
-      if (decrypted !== VERIFY_PLAINTEXT) throw new Error('Incorrect password');
-    } catch {
-      throw new Error('Incorrect password');
-    }
+      const saltB64 = localStorage.getItem(STORAGE_KEYS.SALT);
+      if (!saltB64) throw new Error('No master password set');
 
-    await this.storeKeyInSession(key);
-    return key;
+      const salt = Uint8Array.from(atob(saltB64), c => c.charCodeAt(0));
+      const key = await this.deriveKey(password, salt);
+
+      const verifyToken = localStorage.getItem(STORAGE_KEYS.VERIFY);
+      if (!verifyToken) throw new Error('Verification token missing');
+
+      try {
+        const decrypted = await this.decrypt(verifyToken, key);
+        if (decrypted !== VERIFY_PLAINTEXT) throw new Error('Incorrect password');
+      } catch {
+        throw new Error('Incorrect password');
+      }
+
+      await this.storeKeyInSession(key);
+      return key;
+    } catch (err) {
+      // Re-throw errors that are already descriptive
+      if (err.message === 'No master password set' || err.message === 'Verification token missing' ||
+          err.message === 'Incorrect password') {
+        throw err;
+      }
+      if (err instanceof DOMException) {
+        throw new Error('Incorrect password');
+      }
+      throw err;
+    }
   }
 
   /**
@@ -170,15 +200,24 @@ class EncryptionService {
    * @returns {Promise<Object>} JSON-serializable encrypted package
    */
   async encryptExport(data, password) {
-    const salt = crypto.getRandomValues(new Uint8Array(16));
-    const key = await this.deriveKey(password, salt);
-    const plaintext = JSON.stringify(data);
-    const ciphertext = await this.encrypt(plaintext, key);
-    return {
-      version: 1,
-      salt: btoa(String.fromCharCode(...salt)),
-      data: ciphertext
-    };
+    try {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const key = await this.deriveKey(password, salt);
+      const plaintext = JSON.stringify(data);
+      const ciphertext = await this.encrypt(plaintext, key);
+      return {
+        version: 1,
+        salt: btoa(String.fromCharCode(...salt)),
+        data: ciphertext
+      };
+    } catch (err) {
+      if (err instanceof DOMException) {
+        const e = new Error('Encryption error. Please check your master password.');
+        e.name = 'EncryptionError';
+        throw e;
+      }
+      throw err;
+    }
   }
 
   /**
@@ -202,7 +241,11 @@ class EncryptionService {
       throw new Error('Incorrect password or corrupted data');
     }
 
-    return JSON.parse(plaintext);
+    try {
+      return JSON.parse(plaintext);
+    } catch {
+      throw new SyntaxError('Invalid data format. The file may be corrupted.');
+    }
   }
 }
 

@@ -47,9 +47,21 @@ class CardStore {
   /**
    * Persist the cards array to localStorage
    * @param {Array<Object>} cards
+   * @throws {Error} If storage quota is exceeded
    */
   _writeStorage(cards) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+    } catch (err) {
+      // Re-throw with a descriptive message so callers can handle it
+      if (err && (err.name === 'QuotaExceededError' || err.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+          (err instanceof DOMException && err.code === 22))) {
+        const quotaErr = new Error('Storage is full. Please export your data and clear some space.');
+        quotaErr.name = 'QuotaExceededError';
+        throw quotaErr;
+      }
+      throw err;
+    }
   }
 
   /**
@@ -135,8 +147,15 @@ class CardStore {
    * @returns {Promise<Array<Object>>}
    */
   async getAllCards() {
-    const cards = this._readStorage();
-    return Promise.all(cards.map(card => this.decryptSensitiveFields(card)));
+    try {
+      const cards = this._readStorage();
+      return await Promise.all(cards.map(card => this.decryptSensitiveFields(card)));
+    } catch (err) {
+      if (err && err.name === 'SyntaxError') {
+        throw new SyntaxError('Invalid data format. The file may be corrupted.');
+      }
+      throw err;
+    }
   }
 
   /**
@@ -159,21 +178,26 @@ class CardStore {
    * @returns {Promise<Object>} The stored card (with id, encrypted in storage)
    */
   async addCard(card) {
-    const cards = this._readStorage();
+    try {
+      const cards = this._readStorage();
 
-    const newCard = {
-      ...card,
-      id: card.id || this.generateId(),
-      createdAt: card.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+      const newCard = {
+        ...card,
+        id: card.id || this.generateId(),
+        createdAt: card.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
 
-    const toStore = await this.encryptSensitiveFields(newCard);
-    cards.push(toStore);
-    this._writeStorage(cards);
+      const toStore = await this.encryptSensitiveFields(newCard);
+      cards.push(toStore);
+      this._writeStorage(cards);
 
-    // Return the card with decrypted fields for immediate use
-    return { ...newCard };
+      // Return the card with decrypted fields for immediate use
+      return { ...newCard };
+    } catch (err) {
+      if (err && err.name === 'QuotaExceededError') throw err;
+      throw err;
+    }
   }
 
   /**
@@ -185,23 +209,28 @@ class CardStore {
    * @returns {Promise<Object|null>} Updated card or null if not found
    */
   async updateCard(id, updates) {
-    const cards = this._readStorage();
-    const index = cards.findIndex(c => c.id === id);
-    if (index === -1) return null;
+    try {
+      const cards = this._readStorage();
+      const index = cards.findIndex(c => c.id === id);
+      if (index === -1) return null;
 
-    const updatedCard = {
-      ...cards[index],
-      ...updates,
-      id, // ensure id is not overwritten
-      updatedAt: new Date().toISOString()
-    };
+      const updatedCard = {
+        ...cards[index],
+        ...updates,
+        id, // ensure id is not overwritten
+        updatedAt: new Date().toISOString()
+      };
 
-    const toStore = await this.encryptSensitiveFields(updatedCard);
-    cards[index] = toStore;
-    this._writeStorage(cards);
+      const toStore = await this.encryptSensitiveFields(updatedCard);
+      cards[index] = toStore;
+      this._writeStorage(cards);
 
-    // Return with decrypted fields
-    return { ...updatedCard };
+      // Return with decrypted fields
+      return { ...updatedCard };
+    } catch (err) {
+      if (err && err.name === 'QuotaExceededError') throw err;
+      throw err;
+    }
   }
 
   /**
@@ -230,13 +259,18 @@ class CardStore {
    * @returns {Promise<boolean>} True if deleted, false if not found
    */
   async deleteCard(id) {
-    const cards = this._readStorage();
-    const index = cards.findIndex(c => c.id === id);
-    if (index === -1) return false;
+    try {
+      const cards = this._readStorage();
+      const index = cards.findIndex(c => c.id === id);
+      if (index === -1) return false;
 
-    cards.splice(index, 1);
-    this._writeStorage(cards);
-    return true;
+      cards.splice(index, 1);
+      this._writeStorage(cards);
+      return true;
+    } catch (err) {
+      if (err && err.name === 'QuotaExceededError') throw err;
+      throw err;
+    }
   }
 }
 

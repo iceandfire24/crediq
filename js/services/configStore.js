@@ -38,7 +38,18 @@ class ConfigStore {
    * @param {AppConfig} config
    */
   saveConfig(config) {
-    localStorage.setItem(CONFIG_KEY, JSON.stringify(config.toJSON()));
+    try {
+      localStorage.setItem(CONFIG_KEY, JSON.stringify(config.toJSON()));
+    } catch (err) {
+      // If storage is full, surface a descriptive error
+      if (err && (err.name === 'QuotaExceededError' || err.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+          (err instanceof DOMException && err.code === 22))) {
+        const quotaErr = new Error('Storage is full. Please export your data and clear some space.');
+        quotaErr.name = 'QuotaExceededError';
+        throw quotaErr;
+      }
+      throw err;
+    }
   }
 
   // ---------------------------------------------------------------------------

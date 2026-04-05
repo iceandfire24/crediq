@@ -251,7 +251,7 @@ This implementation plan breaks down the Card Manager application into increment
     - **Property 50: Dual Logo Display**
     - **Validates: Requirements 2.1, 2.4, 2.6, 16.5, 17.2, 17.6**
 
-- [ ] 16. Checkpoint - Ensure all tests pass
+- [x] 16. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 17. Implement calendar and statistics views

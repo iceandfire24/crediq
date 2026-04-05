@@ -232,8 +232,8 @@ This implementation plan breaks down the Card Manager application into increment
     - **Property 44: Shared Limit Dropdown Filtering**
     - **Validates: Requirements 16.1, 16.6**
 
-- [ ] 15. Implement card details view
-  - [ ] 15.1 Create card detail view (js/views/cardDetail.js)
+- [x] 15. Implement card details view
+  - [x] 15.1 Create card detail view (js/views/cardDetail.js)
     - Implement render(cardId) displaying all card information
     - Display card visual with network and bank logos
     - Implement revealCVV() and revealCardNumber() with auto-hide after 30 seconds
@@ -242,7 +242,7 @@ This implementation plan breaks down the Card Manager application into increment
     - Add edit and delete action buttons with delete confirmation dialog
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 3.4, 16.5, 17.2, 17.6, 19.5_
 
-  - [ ]* 15.2 Write property tests for card detail view
+  - [x] 15.2 Write property tests for card detail view
     - **Property 10: Sensitive Data Masking**
     - **Property 11: Clipboard Copy Accuracy**
     - **Property 13: Tag Display Completeness**

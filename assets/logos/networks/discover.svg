@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <rect width="48" height="48" rx="6" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+  <rect x="0" y="0" width="48" height="48" rx="6" fill="#231F20"/>
+  <circle cx="34" cy="24" r="12" fill="#F76F20"/>
+  <text x="14" y="28" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#FFFFFF" text-anchor="middle">DISC</text>
+</svg>

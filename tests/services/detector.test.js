@@ -90,39 +90,39 @@ describe('detectBank', () => {
 
 describe('getNetworkLogo', () => {
   it('returns correct path for known networks', () => {
-    expect(detector.getNetworkLogo('Visa')).toBe('assets/logos/networks/visa.png');
-    expect(detector.getNetworkLogo('Mastercard')).toBe('assets/logos/networks/mastercard.png');
-    expect(detector.getNetworkLogo('American Express')).toBe('assets/logos/networks/amex.png');
-    expect(detector.getNetworkLogo('RuPay')).toBe('assets/logos/networks/rupay.png');
-    expect(detector.getNetworkLogo('Diners Club')).toBe('assets/logos/networks/diners.png');
-    expect(detector.getNetworkLogo('Discover')).toBe('assets/logos/networks/discover.png');
+    expect(detector.getNetworkLogo('Visa')).toBe('assets/logos/networks/visa.svg');
+    expect(detector.getNetworkLogo('Mastercard')).toBe('assets/logos/networks/mastercard.svg');
+    expect(detector.getNetworkLogo('American Express')).toBe('assets/logos/networks/amex.svg');
+    expect(detector.getNetworkLogo('RuPay')).toBe('assets/logos/networks/rupay.svg');
+    expect(detector.getNetworkLogo('Diners Club')).toBe('assets/logos/networks/diners.svg');
+    expect(detector.getNetworkLogo('Discover')).toBe('assets/logos/networks/discover.svg');
   });
 
   it('returns placeholder for unknown network (Req 17.11)', () => {
-    expect(detector.getNetworkLogo('Unknown')).toBe('assets/icons/placeholder.png');
-    expect(detector.getNetworkLogo(null)).toBe('assets/icons/placeholder.png');
-    expect(detector.getNetworkLogo('')).toBe('assets/icons/placeholder.png');
+    expect(detector.getNetworkLogo('Unknown')).toBe('assets/icons/placeholder.svg');
+    expect(detector.getNetworkLogo(null)).toBe('assets/icons/placeholder.svg');
+    expect(detector.getNetworkLogo('')).toBe('assets/icons/placeholder.svg');
   });
 });
 
 describe('getBankLogo', () => {
   it('returns correct path for known banks', () => {
-    expect(detector.getBankLogo('HDFC Bank')).toBe('assets/logos/banks/hdfc.png');
-    expect(detector.getBankLogo('ICICI Bank')).toBe('assets/logos/banks/icici.png');
-    expect(detector.getBankLogo('State Bank of India')).toBe('assets/logos/banks/sbi.png');
-    expect(detector.getBankLogo('Axis Bank')).toBe('assets/logos/banks/axis.png');
-    expect(detector.getBankLogo('Kotak Mahindra Bank')).toBe('assets/logos/banks/kotak.png');
-    expect(detector.getBankLogo('HSBC')).toBe('assets/logos/banks/hsbc.png');
-    expect(detector.getBankLogo('Citibank')).toBe('assets/logos/banks/citibank.png');
-    expect(detector.getBankLogo('Standard Chartered')).toBe('assets/logos/banks/sc.png');
-    expect(detector.getBankLogo('Yes Bank')).toBe('assets/logos/banks/yes.png');
-    expect(detector.getBankLogo('IndusInd Bank')).toBe('assets/logos/banks/indusind.png');
+    expect(detector.getBankLogo('HDFC Bank')).toBe('assets/logos/banks/hdfc.svg');
+    expect(detector.getBankLogo('ICICI Bank')).toBe('assets/logos/banks/icici.svg');
+    expect(detector.getBankLogo('State Bank of India')).toBe('assets/logos/banks/sbi.svg');
+    expect(detector.getBankLogo('Axis Bank')).toBe('assets/logos/banks/axis.svg');
+    expect(detector.getBankLogo('Kotak Mahindra Bank')).toBe('assets/logos/banks/kotak.svg');
+    expect(detector.getBankLogo('HSBC')).toBe('assets/logos/banks/hsbc.svg');
+    expect(detector.getBankLogo('Citibank')).toBe('assets/logos/banks/citibank.svg');
+    expect(detector.getBankLogo('Standard Chartered')).toBe('assets/logos/banks/sc.svg');
+    expect(detector.getBankLogo('Yes Bank')).toBe('assets/logos/banks/yes.svg');
+    expect(detector.getBankLogo('IndusInd Bank')).toBe('assets/logos/banks/indusind.svg');
   });
 
   it('returns placeholder for unknown bank (Req 17.11)', () => {
-    expect(detector.getBankLogo('Unknown')).toBe('assets/icons/placeholder.png');
-    expect(detector.getBankLogo(null)).toBe('assets/icons/placeholder.png');
-    expect(detector.getBankLogo('')).toBe('assets/icons/placeholder.png');
+    expect(detector.getBankLogo('Unknown')).toBe('assets/icons/placeholder.svg');
+    expect(detector.getBankLogo(null)).toBe('assets/icons/placeholder.svg');
+    expect(detector.getBankLogo('')).toBe('assets/icons/placeholder.svg');
   });
 });
 
@@ -198,7 +198,7 @@ describe('PBT: getNetworkLogo always returns a string path', () => {
         const result = detector.getNetworkLogo(input);
         expect(typeof result).toBe('string');
         expect(result.length).toBeGreaterThan(0);
-        expect(result.endsWith('.png')).toBe(true);
+        expect(result.endsWith('.svg')).toBe(true);
       })
     );
   });
@@ -215,7 +215,7 @@ describe('PBT: getBankLogo always returns a string path', () => {
         const result = detector.getBankLogo(input);
         expect(typeof result).toBe('string');
         expect(result.length).toBeGreaterThan(0);
-        expect(result.endsWith('.png')).toBe(true);
+        expect(result.endsWith('.svg')).toBe(true);
       })
     );
   });
@@ -317,7 +317,7 @@ describe('PBT Property 53: Placeholder Logo Fallback', () => {
     'Kotak Mahindra Bank', 'HSBC', 'Citibank', 'Standard Chartered',
     'Yes Bank', 'IndusInd Bank'
   ]);
-  const PLACEHOLDER = 'assets/icons/placeholder.png';
+  const PLACEHOLDER = 'assets/icons/placeholder.svg';
 
   it('getNetworkLogo returns placeholder for any unrecognized network name', () => {
     fc.assert(

@@ -198,8 +198,8 @@ This implementation plan breaks down the Card Manager application into increment
     - Style navigation elements with consistent spacing and typography
     - _Requirements: 13.1, 13.2, 13.4_
 
-- [ ] 13. Implement card list view
-  - [ ] 13.1 Create card list view (js/views/cardList.js)
+- [x] 13. Implement card list view
+  - [x] 13.1 Create card list view (js/views/cardList.js)
     - Implement render(cards) to display responsive card grid (3 cols desktop, 2 tablet, 1 mobile)
     - Implement renderCard(card) with network logo, masked number, expiry, and bank color theme
     - Integrate search bar with real-time filtering via searchController
@@ -209,7 +209,7 @@ This implementation plan breaks down the Card Manager application into increment
     - Display upcoming payment reminders section at top of page
     - _Requirements: 2.1, 4.1, 4.2, 4.3, 4.4, 4.5, 8.5, 8.6, 8.7, 13.1, 13.2, 17.5, 17.8_
 
-  - [ ]* 13.2 Write property tests for card list view
+  - [x] 13.2 Write property tests for card list view
     - **Property 17: Card List Completeness**
     - **Property 47: Network Logo Display**
     - **Property 49: Logo Position Consistency**

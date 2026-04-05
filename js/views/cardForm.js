@@ -831,12 +831,18 @@ class CardFormView {
 
   /**
    * Load all unique tags from existing cards.
+   * Requirements: 10.4, 10.5
    */
   async _loadAvailableTags() {
     try {
-      const cards = await this.cardController.getAllCards();
-      const allTags = cards.flatMap(c => c.tags || []);
-      this._availableTags = [...new Set(allTags)].sort();
+      // Use getAvailableTags() if available (Req 10.4), otherwise fall back to getAllCards()
+      if (typeof this.cardController.getAvailableTags === 'function') {
+        this._availableTags = await this.cardController.getAvailableTags();
+      } else {
+        const cards = await this.cardController.getAllCards();
+        const allTags = cards.flatMap(c => c.tags || []);
+        this._availableTags = [...new Set(allTags)].sort();
+      }
     } catch (_) {
       this._availableTags = [];
     }

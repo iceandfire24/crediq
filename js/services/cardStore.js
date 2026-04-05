@@ -205,6 +205,24 @@ class CardStore {
   }
 
   /**
+   * Get all unique tags across all stored cards.
+   * Requirements: 10.4, 10.5
+   * @returns {Promise<string[]>} Sorted array of unique tag strings
+   */
+  async getAllTags() {
+    const cards = this._readStorage();
+    const tagSet = new Set();
+    for (const card of cards) {
+      if (Array.isArray(card.tags)) {
+        for (const tag of card.tags) {
+          if (tag) tagSet.add(tag);
+        }
+      }
+    }
+    return [...tagSet].sort();
+  }
+
+  /**
    * Delete a card by id.
    * Requirement 3.5: remove the card from the Card_Store
    * Requirement 5.3: immediately persist changes

@@ -123,6 +123,16 @@ class CardController {
     return { success: true };
   }
 
+  /**
+   * Get all unique tags across all stored cards.
+   * Requirements: 10.4, 10.5
+   *
+   * @returns {Promise<string[]>} Sorted array of unique tag strings
+   */
+  async getAvailableTags() {
+    return this.cardStore.getAllTags();
+  }
+
   // ---------------------------------------------------------------------------
   // Shared limit helpers
   // ---------------------------------------------------------------------------

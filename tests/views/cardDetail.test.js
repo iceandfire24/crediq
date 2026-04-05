@@ -406,14 +406,49 @@ describe('Property 46: Shared Limit Display', () => {
 
         await view.render(card.id);
 
-        // No shared-limit-names element should be present
-        const sharedEl = container.querySelector('#shared-limit-names');
-        expect(sharedEl, 'shared-limit-names should not exist when sharedLimitWith is empty').toBeNull();
+        // Trigger the async load
+        await view._loadSharedLimitNames();
 
-        // The financial section should show "—" for shared limit
-        const financialSection = container.querySelector('.section');
-        expect(financialSection).not.toBeNull();
+        // The shared-limit-names element should be present and show "—"
+        const sharedEl = container.querySelector('#shared-limit-names');
+        expect(sharedEl, 'shared-limit-names element should exist').not.toBeNull();
+        expect(sharedEl.textContent.trim()).toBe('—');
       }),
+      { numRuns: 50 }
+    );
+  });
+
+  it('bidirectional: a card referenced by another card shows that card in shared limit display', async () => {
+    await fc.assert(
+      fc.asyncProperty(
+        fc.tuple(fc.uuid(), fc.uuid()),
+        async ([cardAId, cardBId]) => {
+          // cardA has no sharedLimitWith, but cardB references cardA
+          const cardA = {
+            ...fc.sample(cardArb, 1)[0],
+            id: cardAId,
+            sharedLimitWith: [],
+          };
+          const cardB = {
+            ...fc.sample(cardArb, 1)[0],
+            id: cardBId,
+            name: 'Referencing Card',
+            sharedLimitWith: [cardAId],
+          };
+          const allCards = [cardA, cardB];
+
+          const container = createContainer();
+          const view = makeView(container, cardA, allCards);
+
+          await view.render(cardA.id);
+          await view._loadSharedLimitNames();
+
+          const sharedEl = container.querySelector('#shared-limit-names');
+          expect(sharedEl).not.toBeNull();
+          // cardB references cardA, so cardB's name should appear
+          expect(sharedEl.textContent).toContain('Referencing Card');
+        }
+      ),
       { numRuns: 50 }
     );
   });

@@ -59,7 +59,18 @@ class CardListView {
     // Build unique filter options from all cards
     const networks = [...new Set(this._allCards.map(c => c.network).filter(Boolean).filter(n => n !== 'Unknown'))].sort();
     const banks = [...new Set(this._allCards.map(c => c.bank).filter(Boolean).filter(b => b !== 'Unknown'))].sort();
-    const tags = [...new Set(this._allCards.flatMap(c => c.tags || []))].sort();
+
+    // Load all available tags via controller if possible (Req 10.4), else derive from current cards
+    let tags;
+    if (this.cardController && typeof this.cardController.getAvailableTags === 'function') {
+      try {
+        tags = await this.cardController.getAvailableTags();
+      } catch (_) {
+        tags = [...new Set(this._allCards.flatMap(c => c.tags || []))].sort();
+      }
+    } else {
+      tags = [...new Set(this._allCards.flatMap(c => c.tags || []))].sort();
+    }
 
     this.container.innerHTML = this._buildPageHTML(reminders, networks, banks, tags);
 
@@ -374,7 +385,12 @@ class CardListView {
               <option value="">All Tags</option>
               ${tags.map(t => `<option value="${this._esc(t)}">${this._esc(t)}</option>`).join('')}
             </select>
-            ` : ''}
+            ` : `
+            <label class="sr-only" for="filter-tag">Filter by tag</label>
+            <select id="filter-tag" class="form-select" style="min-width:110px; min-height:36px; font-size:var(--text-sm);" aria-label="Filter by tag" disabled>
+              <option value="">All Tags</option>
+            </select>
+            `}
 
             <label class="sr-only" for="sort-cards">Sort cards</label>
             <select id="sort-cards" class="form-select" style="min-width:120px; min-height:36px; font-size:var(--text-sm);" aria-label="Sort cards">

@@ -440,10 +440,9 @@ class CardDetailView {
     const annualFee = card.annualFee ? this._formatCurrency(card.annualFee) : '—';
 
     // Shared limit display (Req 16.5)
-    let sharedLimitHTML = '<dd class="detail-value">—</dd>';
-    if (card.sharedLimitWith && card.sharedLimitWith.length > 0) {
-      sharedLimitHTML = `<dd class="detail-value" id="shared-limit-names" aria-label="Cards sharing this limit">Loading…</dd>`;
-    }
+    // Always render the placeholder so _loadSharedLimitNames can populate it
+    // (bidirectional: this card may reference others OR others may reference this card)
+    const sharedLimitHTML = `<dd class="detail-value" id="shared-limit-names" aria-label="Cards sharing this limit">Loading…</dd>`;
 
     return `
       <div class="section">
@@ -747,17 +746,28 @@ class CardDetailView {
 
   /**
    * Load and display shared limit card names after render.
+   * Handles bidirectional relationships: cards this card references AND cards
+   * that reference this card in their sharedLimitWith array.
    * Requirement 16.5
    */
   async _loadSharedLimitNames() {
-    if (!this._card || !this._card.sharedLimitWith || this._card.sharedLimitWith.length === 0) return;
+    if (!this._card) return;
 
     const el = this.container.querySelector('#shared-limit-names');
     if (!el) return;
 
     try {
       const allCards = await this.cardController.getAllCards();
-      const sharedCards = allCards.filter(c => this._card.sharedLimitWith.includes(c.id));
+      const thisId = this._card.id;
+      const explicitIds = this._card.sharedLimitWith || [];
+
+      // Find cards explicitly listed in this card's sharedLimitWith
+      // OR cards that list this card in their own sharedLimitWith (bidirectional)
+      const sharedCards = allCards.filter(c => {
+        if (c.id === thisId) return false;
+        return explicitIds.includes(c.id) || (c.sharedLimitWith && c.sharedLimitWith.includes(thisId));
+      });
+
       if (sharedCards.length > 0) {
         el.textContent = sharedCards.map(c => c.name).join(', ');
       } else {

@@ -312,8 +312,8 @@ This implementation plan breaks down the Card Manager application into increment
     - Ensure no data is ever sent to external servers
     - _Requirements: 19.1, 19.2, 19.3, 19.4, 19.6, 19.7, 19.9_
 
-- [ ] 20. Implement tag management and shared limit tracking
-  - [ ] 20.1 Add tag functionality across views
+- [x] 20. Implement tag management and shared limit tracking
+  - [x] 20.1 Add tag functionality across views
     - Implement tag creation in card form with persistence
     - Implement tag filter in card list
     - Display all available tags for selection across the app
@@ -324,7 +324,7 @@ This implementation plan breaks down the Card Manager application into increment
     - **Property 39: Available Tags Completeness**
     - **Validates: Requirements 10.2, 10.4, 10.5**
 
-  - [ ] 20.3 Add shared limit functionality
+  - [x] 20.3 Add shared limit functionality
     - Implement shared limit dropdown population filtered by same bank in card form
     - Store and display shared limit relationships in card details
     - Ensure shared limit deduplication in statistics

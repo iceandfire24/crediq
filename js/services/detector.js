@@ -189,8 +189,8 @@ class DetectorService {
     const slug = Object.prototype.hasOwnProperty.call(NETWORK_LOGO_SLUGS, network)
       ? NETWORK_LOGO_SLUGS[network]
       : null;
-    if (!slug) return 'assets/icons/placeholder.png';
-    return `assets/logos/networks/${slug}.png`;
+    if (!slug) return 'assets/icons/placeholder.svg';
+    return `assets/logos/networks/${slug}.svg`;
   }
 
   /**
@@ -202,8 +202,8 @@ class DetectorService {
     const slug = Object.prototype.hasOwnProperty.call(BANK_LOGO_SLUGS, bank)
       ? BANK_LOGO_SLUGS[bank]
       : null;
-    if (!slug) return 'assets/icons/placeholder.png';
-    return `assets/logos/banks/${slug}.png`;
+    if (!slug) return 'assets/icons/placeholder.svg';
+    return `assets/logos/banks/${slug}.svg`;
   }
 
   /**

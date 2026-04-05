@@ -334,15 +334,15 @@ This implementation plan breaks down the Card Manager application into increment
     - **Property 45: Shared Limit Relationship Persistence**
     - **Validates: Requirements 16.2**
 
-- [ ] 21. Add visual assets and bank colors data
-  - [ ] 21.1 Add network and bank logos
+- [x] 21. Add visual assets and bank colors data
+  - [x] 21.1 Add network and bank logos
     - Add Visa, Mastercard, American Express, RuPay, Diners Club, Discover logos to assets/logos/networks/
     - Add logos for HDFC, ICICI, SBI, Axis, Kotak, HSBC, Citibank, Standard Chartered, Yes Bank, IndusInd to assets/logos/banks/
     - Create placeholder icon for unknown networks/banks
     - Ensure consistent logo sizing (32x32px for list, 48x48px for details)
     - _Requirements: 17.1, 17.2, 17.3, 17.4, 17.11, 17.12_
 
-  - [ ] 21.2 Create bank colors configuration (data/bankColors.json)
+  - [x] 21.2 Create bank colors configuration (data/bankColors.json)
     - Define default colors for all supported banks
     - Load default colors on first run; allow user customization in settings
     - _Requirements: 17.7, 17.9, 17.10_

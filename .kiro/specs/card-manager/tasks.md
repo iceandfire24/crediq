@@ -274,8 +274,8 @@ This implementation plan breaks down the Card Manager application into increment
     - Display expiring cards section (within 3 months)
     - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 13.1, 13.2_
 
-- [ ] 18. Implement settings and about views
-  - [ ] 18.1 Create settings view (js/views/settings.js)
+- [x] 18. Implement settings and about views
+  - [x] 18.1 Create settings view (js/views/settings.js)
     - Implement render(config) displaying all settings
     - Add theme toggle (light/dark) with immediate preview and persistence
     - Add date format selector with preview and persistence
@@ -287,11 +287,11 @@ This implementation plan breaks down the Card Manager application into increment
     - Display last export date
     - _Requirements: 6.1, 6.4, 11.1, 11.2, 11.3, 11.4, 11.5, 12.1, 12.2, 12.3, 12.4, 17.9, 17.10, 23.2_
 
-  - [ ]* 18.2 Write property tests for settings view
+  - [x] 18.2 Write property tests for settings view
     - **Property 41: Date Format Application**
     - **Validates: Requirements 12.2**
 
-  - [ ] 18.3 Create about view (js/views/about.js)
+  - [x] 18.3 Create about view (js/views/about.js)
     - Display application name, version, and feature list
     - Add bug report link, documentation links, and Getting Started guide
     - _Requirements: 14.1, 14.2, 14.3, 14.4, 20.4_

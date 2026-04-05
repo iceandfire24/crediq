@@ -254,21 +254,21 @@ This implementation plan breaks down the Card Manager application into increment
 - [x] 16. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 17. Implement calendar and statistics views
-  - [ ] 17.1 Create calendar view (js/views/calendar.js)
+- [x] 17. Implement calendar and statistics views
+  - [x] 17.1 Create calendar view (js/views/calendar.js)
     - Implement renderMonth(month, year) to display calendar grid
     - Implement highlightDates() for statement and due dates with color coding by card/network
     - Implement handleDateClick() to show cards for selected date
     - Add month/year navigation controls and event type legend
     - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 13.1, 13.2_
 
-  - [ ]* 17.2 Write property tests for calendar view
+  - [x] 17.2 Write property tests for calendar view
     - **Property 34: Calendar Date Completeness**
     - **Property 35: Calendar Date Filtering**
     - **Property 36: Event Color Coding**
     - **Validates: Requirements 9.1, 9.2, 9.3, 9.4, 9.5**
 
-  - [ ] 17.3 Create statistics view (js/views/statistics.js)
+  - [x] 17.3 Create statistics view (js/views/statistics.js)
     - Implement render(stats) displaying total cards, annual fees, credit limit, average age
     - Implement renderNetworkBreakdown() and renderBankBreakdown()
     - Display expiring cards section (within 3 months)

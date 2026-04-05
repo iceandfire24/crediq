@@ -1,20 +1,98 @@
 /* Theme Styles - Light and Dark Theme Definitions */
 
-/* Dark Theme */
+/* ─── Light Theme (Default) ─────────────────────────────────────────────── */
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary: #64748b;
+  --secondary-hover: #475569;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+
+  --background: #ffffff;
+  --surface: #f8fafc;
+  --surface-hover: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --border-focus: #2563eb;
+
+  --nav-bg: #ffffff;
+  --nav-text: #64748b;
+  --nav-text-active: #2563eb;
+  --nav-active-bg: #eff6ff;
+  --nav-border: #e2e8f0;
+
+  --card-bg: #ffffff;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+  --input-border-focus: #2563eb;
+  --input-text: #0f172a;
+  --input-placeholder: #94a3b8;
+
+  --overlay-bg: rgba(15, 23, 42, 0.5);
+  --skeleton-base: #e2e8f0;
+  --skeleton-highlight: #f8fafc;
+}
+
+/* ─── Dark Theme ─────────────────────────────────────────────────────────── */
 :root[data-theme="dark"] {
   --primary: #3b82f6;
+  --primary-hover: #60a5fa;
   --secondary: #94a3b8;
+  --secondary-hover: #cbd5e1;
   --success: #34d399;
   --warning: #fbbf24;
   --danger: #f87171;
+  --danger-hover: #fca5a5;
+
   --background: #0f172a;
   --surface: #1e293b;
+  --surface-hover: #293548;
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   --border: #334155;
+  --border-focus: #3b82f6;
+
+  --nav-bg: #1e293b;
+  --nav-text: #94a3b8;
+  --nav-text-active: #60a5fa;
+  --nav-active-bg: #1e3a5f;
+  --nav-border: #334155;
+
+  --card-bg: #1e293b;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  --input-bg: #0f172a;
+  --input-border: #334155;
+  --input-border-focus: #3b82f6;
+  --input-text: #f1f5f9;
+  --input-placeholder: #64748b;
+
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+  --skeleton-base: #334155;
+  --skeleton-highlight: #1e293b;
 }
 
-/* Theme transition for smooth switching */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* ─── Theme Transition ───────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Disable transitions on elements that shouldn't animate */
+img,
+svg,
+video,
+canvas {
+  transition: none;
 }

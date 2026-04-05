@@ -296,15 +296,15 @@ This implementation plan breaks down the Card Manager application into increment
     - Add bug report link, documentation links, and Getting Started guide
     - _Requirements: 14.1, 14.2, 14.3, 14.4, 20.4_
 
-- [ ] 19. Implement master password flow and security features
-  - [ ] 19.1 Create master password UI
+- [x] 19. Implement master password flow and security features
+  - [x] 19.1 Create master password UI
     - Create first-time setup modal for master password with strength indicator
     - Create login modal for returning users with password verification
     - Handle incorrect password with error message and rate limiting (max 5 attempts, 5-minute lockout)
     - Clear session on browser close
     - _Requirements: 15.1, 15.4, 15.5, 15.6, 19.8_
 
-  - [ ] 19.2 Add security hardening
+  - [x] 19.2 Add security hardening
     - Implement input sanitization for all user inputs before rendering
     - Add CSP meta tag restricting scripts to 'self' only
     - Add security warning banner if accessed over HTTP

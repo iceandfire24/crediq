@@ -394,7 +394,7 @@ class CardFormView {
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="field-sharedLimitWith">Shared Limit With <span class="form-label-optional">(optional, same bank only)</span></label>
+              <label class="form-label" for="field-sharedLimitWith" data-tooltip="Select other cards from the same bank that share a combined credit limit with this card.">Shared Limit With <span class="form-label-optional">(optional, same bank only)</span></label>
               ${this._buildSharedLimitHTML(card)}
               <span id="error-sharedLimitWith" class="form-error" role="alert" aria-live="polite"></span>
             </div>
@@ -405,7 +405,7 @@ class CardFormView {
 
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="field-statementDate">Statement Date <span class="form-label-optional">(day 1–31)</span></label>
+                <label class="form-label" for="field-statementDate" data-tooltip="The day of the month your billing cycle closes and your statement is generated (1–31).">Statement Date <span class="form-label-optional">(day 1–31)</span></label>
                 <input id="field-statementDate" class="form-input" type="number" name="statementDate"
                   value="${v('statementDate') || ''}" placeholder="e.g. 5"
                   min="1" max="31" step="1" autocomplete="off"
@@ -435,7 +435,7 @@ class CardFormView {
             </div>
 
             <div id="reminder-period-group" class="form-group" ${reminderHidden}>
-              <label class="form-label" for="field-reminderPeriod">Reminder Period</label>
+              <label class="form-label" for="field-reminderPeriod" data-tooltip="How many days before the payment due date you want to receive a reminder notification.">Reminder Period</label>
               <select id="field-reminderPeriod" class="form-select" name="reminderPeriod"
                 aria-describedby="error-reminderPeriod">
                 <option value="7" ${reminderPeriod == 7 ? 'selected' : ''}>7 days before</option>

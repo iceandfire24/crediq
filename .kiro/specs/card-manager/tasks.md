@@ -216,8 +216,8 @@ This implementation plan breaks down the Card Manager application into increment
     - **Property 51: Bank Color Consistency**
     - **Validates: Requirements 4.1, 17.1, 17.5, 17.8**
 
-- [ ] 14. Implement card form view
-  - [ ] 14.1 Create card form view (js/views/cardForm.js)
+- [x] 14. Implement card form view
+  - [x] 14.1 Create card form view (js/views/cardForm.js)
     - Implement render(card) for both add and edit modes
     - Create form with all required fields (name, number, CVV, expiry) and optional fields
     - Add real-time card number input handler with network/bank detection and card preview update
@@ -228,7 +228,7 @@ This implementation plan breaks down the Card Manager application into increment
     - Implement handleSubmit() with full validation; disable save until form is valid
     - _Requirements: 1.1-1.12, 3.1, 3.2, 8.2, 8.3, 10.1, 16.1, 16.6_
 
-  - [ ]* 14.2 Write property tests for card form view
+  - [x] 14.2 Write property tests for card form view
     - **Property 44: Shared Limit Dropdown Filtering**
     - **Validates: Requirements 16.1, 16.6**
 

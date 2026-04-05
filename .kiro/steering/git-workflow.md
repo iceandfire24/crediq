@@ -60,32 +60,23 @@ git commit -m "feat(statistics): implement statistics service and property tests
 git push -u origin <branch-name>
 ```
 
-## Step 6: Determine Base Branch for PR
+## Step 6: Determine Base Branch
 
-Before raising the PR, determine the correct base branch:
+Determine the correct base branch for the PR description:
 
-1. Run `git log --oneline origin/dev..HEAD` (or the likely base) to see what's ahead.
-2. Check which branch this feature branch was created from by running:
-   ```bash
-   git log --oneline --decorate | head -20
-   ```
-3. The base branch is the branch that was active (checked out) when the feature branch was created — typically the previous feature branch if tasks are being done sequentially, or `dev`/`main` if starting fresh.
-4. If the previous task's branch has already been merged into `dev`, use `dev` as the base. If it hasn't been merged yet, use the previous task's branch as the base so the PR chain is correct.
-5. When in doubt, check with: `git branch -r` to see remote branches and infer the correct base.
+1. Run `git log --oneline -20` to see recent history.
+2. The base branch is the branch that was active when the feature branch was created — typically the previous feature branch if tasks are sequential, or `dev`/`main` if starting fresh.
+3. If the previous task's branch has already been merged into `dev`, the base is `dev`. If not yet merged, the base is the previous task's branch.
+4. When in doubt, run `git branch -r` to see remote branches and infer the correct base.
 
-## Step 7: Raise the PR
+## Step 7: Output PR Description
 
-Use `gh pr create` with a structured description:
+Do NOT run `gh pr create`. Instead, output the PR description as a markdown code block so the user can paste it directly. Include the base branch and title above the block.
 
-```bash
-gh pr create \
-  --base <base-branch> \
-  --head <current-branch> \
-  --title "feat: <short title matching the branch theme>" \
-  --body "<PR description — see format below>"
-```
+**Output format:**
 
-### PR Description Format
+> Branch: `<current-branch>` → base: `<base-branch>`
+> Title: `feat: <short title matching the branch theme>`
 
 ```markdown
 ## Summary
@@ -141,11 +132,12 @@ git commit -m "feat(statistics): implement statistics service and property tests
 git push -u origin feat/implement-statistics-service
 
 # Determine base branch (e.g. previous task branch or dev if already merged)
-gh pr create \
-  --base feat/checkpoint-ensure-all-tests-pass \
-  --head feat/implement-statistics-service \
-  --title "feat: statistics service and property tests (task 8)" \
-  --body "..."
+# Then output the PR description as a markdown block for the user to paste:
+#
+# Branch: `feat/implement-statistics-service` → base: `feat/checkpoint-ensure-all-tests-pass`
+# Title: `feat: statistics service and property tests (task 8)`
+#
+# (followed by the markdown description block)
 
 # After PR is merged:
 git checkout dev

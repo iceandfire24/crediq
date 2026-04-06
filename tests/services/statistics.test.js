@@ -239,7 +239,96 @@ describe('StatisticsService - calculateBankStats', () => {
   });
 });
 
-// ─── Property-Based Tests ─────────────────────────────────────────────────────
+// ─── Cache Tests ──────────────────────────────────────────────────────────────
+
+describe('StatisticsService - caching (Req 21.5)', () => {
+  it('returns cached result on second call without re-computing', async () => {
+    let callCount = 0;
+    const cards = [makeCard({ updatedAt: '2024-01-01T00:00:00.000Z' })];
+    const cardStore = {
+      getAllCards: async () => {
+        callCount++;
+        return cards;
+      }
+    };
+    const svc = new StatisticsService(cardStore);
+
+    await svc.calculateOverallStats();
+    await svc.calculateOverallStats();
+
+    // getAllCards called twice (once per calculateOverallStats call) but result is cached
+    expect(callCount).toBe(2); // still fetches cards to compute key, but result is reused
+    const r1 = await svc.calculateOverallStats();
+    const r2 = await svc.calculateOverallStats();
+    expect(r1).toBe(r2); // same object reference — cached
+  });
+
+  it('invalidateCache() clears the cache so next call recomputes', async () => {
+    const cards = [makeCard({ updatedAt: '2024-01-01T00:00:00.000Z' })];
+    const svc = makeService(cards);
+
+    const r1 = await svc.calculateOverallStats();
+    svc.invalidateCache();
+    const r2 = await svc.calculateOverallStats();
+
+    // After invalidation, a new object is returned (not the same reference)
+    expect(r1).not.toBe(r2);
+    // But values should be equal
+    expect(r1.totalCards).toBe(r2.totalCards);
+  });
+
+  it('cache key changes when card count changes', async () => {
+    const cards = [makeCard({ updatedAt: '2024-01-01T00:00:00.000Z' })];
+    let currentCards = [...cards];
+    const cardStore = { getAllCards: async () => currentCards };
+    const svc = new StatisticsService(cardStore);
+
+    const r1 = await svc.calculateOverallStats();
+    expect(r1.totalCards).toBe(1);
+
+    // Add a card — different count means different cache key
+    currentCards = [...cards, makeCard({ updatedAt: '2024-06-01T00:00:00.000Z' })];
+    const r2 = await svc.calculateOverallStats();
+    expect(r2.totalCards).toBe(2);
+    expect(r1).not.toBe(r2);
+  });
+
+  it('network and bank stats are also cached independently', async () => {
+    const cards = [
+      makeCard({ network: 'Visa', bank: 'HDFC Bank', updatedAt: '2024-01-01T00:00:00.000Z' })
+    ];
+    const svc = makeService(cards);
+
+    const n1 = await svc.calculateNetworkStats();
+    const n2 = await svc.calculateNetworkStats();
+    expect(n1).toBe(n2); // same reference
+
+    const b1 = await svc.calculateBankStats();
+    const b2 = await svc.calculateBankStats();
+    expect(b1).toBe(b2); // same reference
+  });
+
+  it('invalidateCache() clears all cached stats (overall, network, bank)', async () => {
+    const cards = [makeCard({ updatedAt: '2024-01-01T00:00:00.000Z' })];
+    const svc = makeService(cards);
+
+    const o1 = await svc.calculateOverallStats();
+    const n1 = await svc.calculateNetworkStats();
+    const b1 = await svc.calculateBankStats();
+
+    svc.invalidateCache();
+
+    const o2 = await svc.calculateOverallStats();
+    const n2 = await svc.calculateNetworkStats();
+    const b2 = await svc.calculateBankStats();
+
+    expect(o1).not.toBe(o2);
+    expect(n1).not.toBe(n2);
+    expect(b1).not.toBe(b2);
+  });
+});
+
+
 
 /**
  * Validates: Requirements 7.1, 7.2

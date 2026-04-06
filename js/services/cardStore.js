@@ -12,6 +12,18 @@ class CardStore {
    */
   constructor(crypto) {
     this.crypto = crypto;
+    // Optional reference to StatisticsService for cache invalidation (Req 21.5)
+    this.statisticsService = null;
+  }
+
+  /**
+   * Invalidate the statistics cache if a statistics service is registered.
+   * Requirement 21.5
+   */
+  _invalidateStatisticsCache() {
+    if (this.statisticsService && typeof this.statisticsService.invalidateCache === 'function') {
+      this.statisticsService.invalidateCache();
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -191,6 +203,7 @@ class CardStore {
       const toStore = await this.encryptSensitiveFields(newCard);
       cards.push(toStore);
       this._writeStorage(cards);
+      this._invalidateStatisticsCache();
 
       // Return the card with decrypted fields for immediate use
       return { ...newCard };
@@ -224,6 +237,7 @@ class CardStore {
       const toStore = await this.encryptSensitiveFields(updatedCard);
       cards[index] = toStore;
       this._writeStorage(cards);
+      this._invalidateStatisticsCache();
 
       // Return with decrypted fields
       return { ...updatedCard };
@@ -266,6 +280,7 @@ class CardStore {
 
       cards.splice(index, 1);
       this._writeStorage(cards);
+      this._invalidateStatisticsCache();
       return true;
     } catch (err) {
       if (err && err.name === 'QuotaExceededError') throw err;

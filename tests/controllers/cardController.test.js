@@ -309,3 +309,71 @@ describe('CardController - getSharedLimitCards', () => {
     expect(result).toEqual([]);
   });
 });
+
+// ─── Export Prompt Tests (Req 23.1) ──────────────────────────────────────────
+
+describe('CardController - export prompt after 5 cards (Req 23.1)', () => {
+  beforeEach(() => {
+    // Clear the export prompt flag before each test
+    if (typeof localStorage !== 'undefined') {
+      localStorage.removeItem('cm_export_prompt_shown');
+    }
+  });
+
+  it('emits export-prompt event when 5th card is added', async () => {
+    // Store starts with 4 cards; adding one more reaches 5
+    const existingCards = [makeCard(), makeCard(), makeCard(), makeCard()];
+    const store = makeCardStore(existingCards);
+    const eventBus = makeEventBus();
+    const ctrl = new CardController(store, makeValidator(true), makeDetector(), eventBus);
+
+    await ctrl.addCard(makeValidCardData());
+
+    const calls = eventBus.dispatchEvent.mock.calls;
+    const exportPromptCall = calls.find(([e]) => e.type === 'export-prompt');
+    expect(exportPromptCall).toBeDefined();
+    expect(exportPromptCall[0].detail.cardCount).toBeGreaterThanOrEqual(5);
+  });
+
+  it('does not emit export-prompt when fewer than 5 cards exist', async () => {
+    const existingCards = [makeCard(), makeCard(), makeCard()]; // 3 cards → adding makes 4
+    const store = makeCardStore(existingCards);
+    const eventBus = makeEventBus();
+    const ctrl = new CardController(store, makeValidator(true), makeDetector(), eventBus);
+
+    await ctrl.addCard(makeValidCardData());
+
+    const calls = eventBus.dispatchEvent.mock.calls;
+    const exportPromptCall = calls.find(([e]) => e.type === 'export-prompt');
+    expect(exportPromptCall).toBeUndefined();
+  });
+
+  it('does not emit export-prompt a second time once already shown', async () => {
+    // This behavior relies on localStorage being available (browser environment).
+    // In Node.js test environment, localStorage is undefined so we skip the persistence check.
+    if (typeof localStorage === 'undefined') return;
+
+    localStorage.setItem('cm_export_prompt_shown', '1');
+
+    const existingCards = [makeCard(), makeCard(), makeCard(), makeCard()];
+    const store = makeCardStore(existingCards);
+    const eventBus = makeEventBus();
+    const ctrl = new CardController(store, makeValidator(true), makeDetector(), eventBus);
+
+    await ctrl.addCard(makeValidCardData());
+
+    const calls = eventBus.dispatchEvent.mock.calls;
+    const exportPromptCall = calls.find(([e]) => e.type === 'export-prompt');
+    expect(exportPromptCall).toBeUndefined();
+  });
+
+  it('still returns success for the card add even when export prompt fires', async () => {
+    const existingCards = [makeCard(), makeCard(), makeCard(), makeCard()];
+    const store = makeCardStore(existingCards);
+    const ctrl = new CardController(store, makeValidator(true), makeDetector());
+
+    const result = await ctrl.addCard(makeValidCardData());
+    expect(result.success).toBe(true);
+    expect(result.card).toBeDefined();
+  });
+});

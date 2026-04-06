@@ -1,8 +1,10 @@
 /**
  * Card Controller
  * CRUD operations for cards with validation, network/bank detection, and event emission
- * Requirements: 1.9, 1.10, 1.11, 3.1, 3.2, 3.3, 3.4, 3.5, 16.1, 16.6
+ * Requirements: 1.9, 1.10, 1.11, 3.1, 3.2, 3.3, 3.4, 3.5, 16.1, 16.6, 23.1
  */
+
+const EXPORT_PROMPT_KEY = 'cm_export_prompt_shown';
 
 class CardController {
   /**
@@ -68,6 +70,9 @@ class CardController {
 
     // Emit custom event (Req 16.1)
     this._emit('card-added', { card });
+
+    // Prompt user to export after reaching 5 cards for the first time (Req 23.1)
+    await this._checkExportPrompt();
 
     return { success: true, card };
   }
@@ -158,6 +163,27 @@ class CardController {
   // ---------------------------------------------------------------------------
   // Private helpers
   // ---------------------------------------------------------------------------
+
+  /**
+   * Check if the user has reached 5 cards for the first time and emit a prompt event.
+   * Requirement 23.1
+   */
+  async _checkExportPrompt() {
+    try {
+      // Only prompt once
+      if (typeof localStorage !== 'undefined' && localStorage.getItem(EXPORT_PROMPT_KEY)) return;
+
+      const allCards = await this.cardStore.getAllCards();
+      if (allCards.length >= 5) {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem(EXPORT_PROMPT_KEY, '1');
+        }
+        this._emit('export-prompt', { cardCount: allCards.length });
+      }
+    } catch {
+      // Non-fatal — do not block card add
+    }
+  }
 
   /**
    * Enrich card data with detected network and bank.

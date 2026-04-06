@@ -6,6 +6,7 @@
 import { CONFIG } from './config.js';
 import { EncryptionService } from './services/encryption.js';
 import { MasterPasswordView } from './views/masterPassword.js';
+import { checkBrowserCompatibility } from './utils/featureDetect.js';
 
 class App {
   constructor() {
@@ -21,6 +22,11 @@ class App {
     if (this.initialized) return;
 
     console.log(`Card Manager v${CONFIG.VERSION} starting...`);
+
+    // Check browser compatibility before anything else (Req 22.3, 22.4)
+    if (!checkBrowserCompatibility()) {
+      return; // Warning already displayed; do not proceed
+    }
 
     try {
       // Load saved theme

@@ -1,10 +1,46 @@
 /**
  * Settings View
  * App configuration and preferences
- * Requirements: 6.1, 6.4, 11.1, 11.2, 11.3, 11.4, 11.5, 12.1, 12.2, 12.3, 12.4, 17.9, 17.10, 23.2
+ * Requirements: 6.1, 6.4, 11.1, 11.2, 11.3, 11.4, 11.5, 12.1, 12.2, 12.3, 12.4, 17.9, 17.10, 23.2, 23.3, 23.4, 23.5, 23.6
  */
 
 const LAST_EXPORT_KEY = 'cm_last_export';
+const BACKUP_KEY = 'cardmanager_backup';
+
+// ---------------------------------------------------------------------------
+// Import validation helpers (Req 23.3, 23.6)
+// ---------------------------------------------------------------------------
+
+/**
+ * Validate the decrypted import data structure.
+ * Returns { valid: true } or { valid: false, errors: string[] }
+ * Requirement 23.6
+ * @param {*} data
+ * @returns {{ valid: boolean, errors?: string[] }}
+ */
+function validateImportData(data) {
+  const errors = [];
+
+  if (!data || typeof data !== 'object') {
+    return { valid: false, errors: ['Import data is not a valid object.'] };
+  }
+
+  if (!Array.isArray(data.cards)) {
+    errors.push('Missing required field: "cards" (must be an array).');
+  } else {
+    data.cards.forEach((card, idx) => {
+      const label = `Card[${idx}]${card.name ? ` ("${card.name}")` : ''}`;
+      if (!card.id) errors.push(`${label}: missing "id".`);
+      if (!card.name) errors.push(`${label}: missing "name".`);
+      if (!card.number) errors.push(`${label}: missing "number".`);
+      if (!card.cvv) errors.push(`${label}: missing "cvv".`);
+      if (!card.expiry) errors.push(`${label}: missing "expiry".`);
+    });
+  }
+
+  if (errors.length > 0) return { valid: false, errors };
+  return { valid: true };
+}
 
 class SettingsView {
   /**
@@ -205,6 +241,10 @@ class SettingsView {
             <button id="import-btn" class="btn btn-secondary" type="button">
               Import Data
             </button>
+            <button id="download-json-btn" class="btn btn-secondary" type="button"
+              title="Download a plain JSON backup (no password required)">
+              Download JSON Backup
+            </button>
             <input id="import-file-input" type="file" accept=".json" style="display:none;"
               aria-label="Select import file" />
           </div>
@@ -316,11 +356,13 @@ class SettingsView {
     const importBtn = this.container.querySelector('#import-btn');
     const fileInput = this.container.querySelector('#import-file-input');
     const clearBtn = this.container.querySelector('#clear-data-btn');
+    const downloadJsonBtn = this.container.querySelector('#download-json-btn');
 
     if (exportBtn) exportBtn.addEventListener('click', () => this._handleExport());
     if (importBtn) importBtn.addEventListener('click', () => fileInput && fileInput.click());
     if (fileInput) fileInput.addEventListener('change', (e) => this._handleImportFileSelected(e));
     if (clearBtn) clearBtn.addEventListener('click', () => this._handleClearData());
+    if (downloadJsonBtn) downloadJsonBtn.addEventListener('click', () => this._handleDownloadJson());
   }
 
   _attachModalListeners() {
@@ -384,7 +426,36 @@ class SettingsView {
   }
 
   // ---------------------------------------------------------------------------
-  // Private: Import flow (Req 6.4, 6.5, 6.6, 6.7)
+  // Private: Download JSON backup (Req 23.5)
+  // ---------------------------------------------------------------------------
+
+  async _handleDownloadJson() {
+    try {
+      const cards = await this.cardStore.getAllCards();
+      const config = this.configStore ? this.configStore.getConfig() : {};
+      const backupData = {
+        version: 1,
+        exportDate: new Date().toISOString(),
+        cards,
+        config
+      };
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `card-manager-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      this._showToast('JSON backup downloaded.', 'success');
+    } catch (err) {
+      this._showToast(err.message || 'Failed to download backup.', 'error');
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Private: Import flow (Req 6.4, 6.5, 6.6, 6.7, 23.3, 23.4, 23.6)
   // ---------------------------------------------------------------------------
 
   async _handleImportFileSelected(event) {
@@ -401,9 +472,9 @@ class SettingsView {
       return;
     }
 
-    // Validate structure
+    // Validate encrypted wrapper structure (Req 23.3)
     if (!encryptedData || !encryptedData.data || !encryptedData.salt) {
-      this._showToast('Invalid export file structure.', 'error');
+      this._showToast('Invalid export file structure. Expected an encrypted export package.', 'error');
       event.target.value = '';
       return;
     }
@@ -417,11 +488,15 @@ class SettingsView {
         try {
           const importedData = await this.encryptionService.decryptImport(encryptedData, password);
 
-          if (!importedData || !Array.isArray(importedData.cards)) {
-            throw new Error('Invalid data structure in export file.');
+          // Validate decrypted data structure with detailed errors (Req 23.6)
+          const validation = validateImportData(importedData);
+          if (!validation.valid) {
+            const errorList = validation.errors.join('\n• ');
+            this._showModalError(`Invalid import data:\n• ${errorList}`);
+            return;
           }
 
-          // Pre-import backup (Req 23.4)
+          // Create automatic backup before applying import (Req 23.4)
           await this._createPreImportBackup();
 
           // Merge/replace cards
@@ -445,7 +520,7 @@ class SettingsView {
     try {
       const cards = await this.cardStore.getAllCards();
       const backup = { cards, backupDate: new Date().toISOString() };
-      localStorage.setItem('cm_pre_import_backup', JSON.stringify(backup));
+      localStorage.setItem(BACKUP_KEY, JSON.stringify(backup));
     } catch {
       // Non-fatal — proceed with import
     }

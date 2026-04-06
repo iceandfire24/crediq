@@ -184,3 +184,151 @@ describe('Property 41: Date Format Application', () => {
     );
   });
 });
+
+// ─── Import Validation Tests (Req 23.3, 23.4, 23.6) ─────────────────────────
+
+// Access the module-level validateImportData via a test-only export approach.
+// Since it's a module-level function, we test it indirectly through the view's
+// import flow, and also test the backup key behavior.
+
+describe('validateImportData - detailed error messages (Req 23.6)', () => {
+  // We test the validation logic by triggering the import flow with mocked data.
+
+  it('shows detailed error when cards array is missing', async () => {
+    const container = document.createElement('div');
+    const encryptionService = makeEncryptionService();
+    // decryptImport returns data without a cards array
+    encryptionService.decryptImport = vi.fn(async () => ({ version: 1, exportDate: '2024-01-01' }));
+
+    const cardStore = makeCardStore();
+    const view = new SettingsView(container, makeConfigStore(), encryptionService, cardStore);
+    view.render();
+
+    // Simulate file selection with a valid encrypted wrapper
+    const fileInput = container.querySelector('#import-file-input');
+    const encryptedWrapper = { data: 'enc', salt: 'abc' };
+    const file = new File([JSON.stringify(encryptedWrapper)], 'export.json', { type: 'application/json' });
+
+    // Trigger file selection
+    Object.defineProperty(fileInput, 'files', { value: [file], configurable: true });
+    fileInput.dispatchEvent(new Event('change'));
+
+    // Wait for async operations
+    await new Promise(r => setTimeout(r, 50));
+
+    // Password modal should be open; simulate entering password
+    const modal = container.querySelector('#password-modal');
+    expect(modal).toBeTruthy();
+
+    const pwInput = container.querySelector('#modal-password');
+    if (pwInput) pwInput.value = 'testpassword';
+
+    const confirmBtn = container.querySelector('#modal-confirm-btn');
+    if (confirmBtn) confirmBtn.click();
+
+    await new Promise(r => setTimeout(r, 50));
+
+    // Should show error about missing cards
+    const errorEl = container.querySelector('#modal-password-error');
+    expect(errorEl).toBeTruthy();
+    expect(errorEl.textContent).toMatch(/cards/i);
+  });
+
+  it('shows detailed error when individual card fields are missing', async () => {
+    const container = document.createElement('div');
+    const encryptionService = makeEncryptionService();
+    // decryptImport returns cards with missing fields
+    encryptionService.decryptImport = vi.fn(async () => ({
+      version: 1,
+      cards: [{ id: '1', name: 'Test' }] // missing number, cvv, expiry
+    }));
+
+    const cardStore = makeCardStore();
+    const view = new SettingsView(container, makeConfigStore(), encryptionService, cardStore);
+    view.render();
+
+    const fileInput = container.querySelector('#import-file-input');
+    const encryptedWrapper = { data: 'enc', salt: 'abc' };
+    const file = new File([JSON.stringify(encryptedWrapper)], 'export.json', { type: 'application/json' });
+
+    Object.defineProperty(fileInput, 'files', { value: [file], configurable: true });
+    fileInput.dispatchEvent(new Event('change'));
+
+    await new Promise(r => setTimeout(r, 50));
+
+    const pwInput = container.querySelector('#modal-password');
+    if (pwInput) pwInput.value = 'testpassword';
+
+    const confirmBtn = container.querySelector('#modal-confirm-btn');
+    if (confirmBtn) confirmBtn.click();
+
+    await new Promise(r => setTimeout(r, 50));
+
+    const errorEl = container.querySelector('#modal-password-error');
+    expect(errorEl).toBeTruthy();
+    // Should mention missing fields
+    expect(errorEl.textContent).toMatch(/number|cvv|expiry/i);
+  });
+
+  it('creates a backup in localStorage before importing (Req 23.4)', async () => {
+    const container = document.createElement('div');
+    const encryptionService = makeEncryptionService();
+    // Valid import data
+    encryptionService.decryptImport = vi.fn(async () => ({
+      version: 1,
+      cards: [{
+        id: '1', name: 'Test Card', number: '4111111111111111',
+        cvv: '123', expiry: '2099-12'
+      }]
+    }));
+
+    const cardStore = makeCardStore();
+    cardStore.getAllCards = vi.fn(async () => [
+      { id: 'existing-1', name: 'Existing', number: '4111', cvv: '111', expiry: '2099-01' }
+    ]);
+
+    const view = new SettingsView(container, makeConfigStore(), encryptionService, cardStore);
+    view.render();
+
+    const fileInput = container.querySelector('#import-file-input');
+    const encryptedWrapper = { data: 'enc', salt: 'abc' };
+    const file = new File([JSON.stringify(encryptedWrapper)], 'export.json', { type: 'application/json' });
+
+    Object.defineProperty(fileInput, 'files', { value: [file], configurable: true });
+    fileInput.dispatchEvent(new Event('change'));
+
+    await new Promise(r => setTimeout(r, 50));
+
+    const pwInput = container.querySelector('#modal-password');
+    if (pwInput) pwInput.value = 'testpassword';
+
+    const confirmBtn = container.querySelector('#modal-confirm-btn');
+    if (confirmBtn) confirmBtn.click();
+
+    await new Promise(r => setTimeout(r, 100));
+
+    // Backup should be stored in localStorage
+    const backup = localStorage.getItem('cardmanager_backup');
+    expect(backup).toBeTruthy();
+    const parsed = JSON.parse(backup);
+    expect(parsed.backupDate).toBeDefined();
+    expect(Array.isArray(parsed.cards)).toBe(true);
+  });
+});
+
+describe('Download JSON Backup button (Req 23.5)', () => {
+  it('renders the Download JSON Backup button in the data section', () => {
+    const { container } = createView();
+    const view = new SettingsView(
+      container,
+      makeConfigStore(),
+      makeEncryptionService(),
+      makeCardStore()
+    );
+    view.render();
+
+    const btn = container.querySelector('#download-json-btn');
+    expect(btn).toBeTruthy();
+    expect(btn.textContent.trim()).toMatch(/json backup/i);
+  });
+});

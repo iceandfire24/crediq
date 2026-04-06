@@ -379,14 +379,14 @@ This implementation plan breaks down the Card Manager application into increment
     - Cache computed statistics values
     - _Requirements: 21.2, 21.3, 21.4, 21.5, 21.6_
 
-- [ ] 25. Implement data backup and browser compatibility
-  - [ ] 25.1 Add backup prompts and enhanced import/export
+- [x] 25. Implement data backup and browser compatibility
+  - [x] 25.1 Add backup prompts and enhanced import/export
     - Prompt user to export after adding 5 cards
     - Validate import file structure before applying; create automatic backup before import
     - Display detailed validation errors for invalid imports
     - _Requirements: 23.1, 23.3, 23.4, 23.5, 23.6_
 
-  - [ ] 25.2 Add feature detection and browser compatibility
+  - [x] 25.2 Add feature detection and browser compatibility
     - Detect Web Crypto API and localStorage support; display warning if missing
     - Add robots.txt (disallow all for privacy) and favicon/web app manifest
     - Create netlify.toml and vercel.json deployment configurations

@@ -10,6 +10,34 @@ class StatisticsService {
    */
   constructor(cardStore) {
     this.cardStore = cardStore;
+    // Cache for computed statistics (Req 21.5)
+    this._cache = {};
+    this._cacheKey = null;
+  }
+
+  /**
+   * Compute a cache key from the cards array.
+   * Uses card count + latest updatedAt timestamp for fast invalidation.
+   * @param {Array<Object>} cards
+   * @returns {string}
+   */
+  _computeCacheKey(cards) {
+    const count = cards.length;
+    const lastUpdated = cards.reduce((max, c) => {
+      const ts = c.updatedAt || c.createdAt || '';
+      return ts > max ? ts : max;
+    }, '');
+    return `${count}:${lastUpdated}`;
+  }
+
+  /**
+   * Invalidate the statistics cache.
+   * Should be called whenever cards are added, updated, or deleted.
+   * Requirement 21.5
+   */
+  invalidateCache() {
+    this._cache = {};
+    this._cacheKey = null;
   }
 
   /**
@@ -19,13 +47,28 @@ class StatisticsService {
    */
   async calculateOverallStats() {
     const cards = await this.cardStore.getAllCards();
-    return {
+    const key = this._computeCacheKey(cards);
+
+    if (key === this._cacheKey && this._cache.overall) {
+      return this._cache.overall;
+    }
+
+    // Key changed — reset cache for new card set
+    if (key !== this._cacheKey) {
+      this._cache = {};
+      this._cacheKey = key;
+    }
+
+    const result = {
       totalCards: cards.length,
       totalFees: this.calculateTotalFees(cards),
       totalCreditLimit: this.calculateTotalCreditLimit(cards),
       averageAge: this.calculateAverageAge(cards),
       expiringCards: this.findExpiringCards(cards, 3)
     };
+
+    this._cache.overall = result;
+    return result;
   }
 
   /**
@@ -35,8 +78,18 @@ class StatisticsService {
    */
   async calculateNetworkStats() {
     const cards = await this.cardStore.getAllCards();
-    const groups = {};
+    const key = this._computeCacheKey(cards);
 
+    if (key === this._cacheKey && this._cache.network) {
+      return this._cache.network;
+    }
+
+    if (key !== this._cacheKey) {
+      this._cache = {};
+      this._cacheKey = key;
+    }
+
+    const groups = {};
     for (const card of cards) {
       const network = card.network || 'Unknown';
       if (!groups[network]) {
@@ -45,12 +98,15 @@ class StatisticsService {
       groups[network].push(card);
     }
 
-    return Object.entries(groups).map(([network, networkCards]) => ({
+    const result = Object.entries(groups).map(([network, networkCards]) => ({
       network,
       totalCards: networkCards.length,
       totalFees: this.calculateTotalFees(networkCards),
       totalCreditLimit: this.calculateTotalCreditLimit(networkCards)
     }));
+
+    this._cache.network = result;
+    return result;
   }
 
   /**
@@ -59,8 +115,18 @@ class StatisticsService {
    */
   async calculateBankStats() {
     const cards = await this.cardStore.getAllCards();
-    const groups = {};
+    const key = this._computeCacheKey(cards);
 
+    if (key === this._cacheKey && this._cache.bank) {
+      return this._cache.bank;
+    }
+
+    if (key !== this._cacheKey) {
+      this._cache = {};
+      this._cacheKey = key;
+    }
+
+    const groups = {};
     for (const card of cards) {
       const bank = card.bank || 'Unknown';
       if (!groups[bank]) {
@@ -69,12 +135,15 @@ class StatisticsService {
       groups[bank].push(card);
     }
 
-    return Object.entries(groups).map(([bank, bankCards]) => ({
+    const result = Object.entries(groups).map(([bank, bankCards]) => ({
       bank,
       totalCards: bankCards.length,
       totalFees: this.calculateTotalFees(bankCards),
       totalCreditLimit: this.calculateTotalCreditLimit(bankCards)
     }));
+
+    this._cache.bank = result;
+    return result;
   }
 
   /**

@@ -209,6 +209,9 @@ class AboutView {
   }
 }
 
+// ES module export
+export { AboutView, APP_VERSION };
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { AboutView, APP_VERSION };

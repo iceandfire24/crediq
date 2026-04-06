@@ -556,6 +556,9 @@ class CardListView {
   }
 }
 
+// ES module export
+export { CardListView };
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { CardListView };

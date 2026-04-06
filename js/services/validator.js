@@ -262,7 +262,10 @@ class ValidatorService {
   }
 }
 
-// Export for use in other modules
+// ES module export
+export { ValidatorService };
+
+// CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { ValidatorService };
 }

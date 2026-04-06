@@ -4,10 +4,7 @@
  * Requirements: 11.4, 11.5, 12.3, 12.4, 17.9, 17.10
  */
 
-const { AppConfig, DEFAULT_BANK_COLORS } =
-  typeof require !== 'undefined'
-    ? require('../models/config.js')
-    : { AppConfig: window.AppConfig, DEFAULT_BANK_COLORS: window.DEFAULT_BANK_COLORS };
+import { AppConfig } from '../models/config.js';
 
 const CONFIG_KEY = 'config';
 
@@ -126,7 +123,10 @@ class ConfigStore {
   }
 }
 
-// Export for use in other modules
+// ES module export
+export { ConfigStore };
+
+// CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { ConfigStore };
 }

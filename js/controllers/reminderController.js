@@ -183,7 +183,10 @@ class ReminderController {
   }
 }
 
-// Export for use in other modules
+// ES module export
+export { ReminderController };
+
+// CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { ReminderController };
 }

@@ -397,6 +397,9 @@ class StatisticsView {
   }
 }
 
+// ES module export
+export { StatisticsView };
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { StatisticsView };

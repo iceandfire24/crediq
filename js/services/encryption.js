@@ -249,7 +249,10 @@ class EncryptionService {
   }
 }
 
-// Export for use in other modules
+// ES module export
+export { EncryptionService };
+
+// CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { EncryptionService };
 }

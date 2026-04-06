@@ -392,8 +392,8 @@ This implementation plan breaks down the Card Manager application into increment
     - Create netlify.toml and vercel.json deployment configurations
     - _Requirements: 18.2, 18.6, 18.7, 22.3, 22.4_
 
-- [ ] 26. Final checkpoint and integration wiring
-  - [ ] 26.1 Wire all components together in app.js
+- [x] 26. Final checkpoint and integration wiring
+  - [x] 26.1 Wire all components together in app.js
     - Initialize router with all routes
     - Initialize master password flow on startup
     - Load and apply saved theme and date format
@@ -401,7 +401,7 @@ This implementation plan breaks down the Card Manager application into increment
     - Render initial view based on current route
     - _Requirements: All requirements_
 
-  - [ ]* 26.2 Write integration tests
+  - [x] 26.2 Write integration tests
     - Test complete add card flow (form → validation → storage → display)
     - Test complete edit and delete card flows
     - Test search, filter, and sort flow

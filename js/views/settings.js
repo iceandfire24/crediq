@@ -707,6 +707,9 @@ class SettingsView {
   }
 }
 
+// ES module export
+export { SettingsView };
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { SettingsView };

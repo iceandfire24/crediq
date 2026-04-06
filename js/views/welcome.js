@@ -229,6 +229,9 @@ function _esc(str) {
     .replace(/'/g, '&#39;');
 }
 
+// ES module export
+export { isFirstRun, markWelcomed, showWelcome, DEMO_CARDS, STEPS };
+
 // CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { isFirstRun, markWelcomed, showWelcome, DEMO_CARDS, STEPS };

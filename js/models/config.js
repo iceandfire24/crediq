@@ -76,6 +76,9 @@ class AppConfig {
   }
 }
 
+// ES module export
+export { AppConfig, DEFAULT_BANK_COLORS };
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { AppConfig, DEFAULT_BANK_COLORS };

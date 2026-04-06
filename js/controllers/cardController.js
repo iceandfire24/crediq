@@ -208,7 +208,10 @@ class CardController {
   }
 }
 
-// Export for use in other modules
+// ES module export
+export { CardController };
+
+// CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { CardController };
 }

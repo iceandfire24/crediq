@@ -403,6 +403,9 @@ class MasterPasswordView {
   }
 }
 
+// ES module export
+export { MasterPasswordView };
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { MasterPasswordView };

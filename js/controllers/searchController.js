@@ -150,7 +150,10 @@ class SearchController {
   }
 }
 
-// Export for use in other modules
+// ES module export
+export { SearchController };
+
+// CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { SearchController };
 }

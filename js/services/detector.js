@@ -222,6 +222,10 @@ class DetectorService {
 // Export singleton instance
 const detectorService = new DetectorService();
 
+// ES module export
+export { DetectorService, detectorService, NETWORK_PATTERNS, BANK_BINS, DEFAULT_BANK_COLORS };
+
+// CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { DetectorService, detectorService, NETWORK_PATTERNS, BANK_BINS, DEFAULT_BANK_COLORS };
 }

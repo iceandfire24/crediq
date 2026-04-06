@@ -458,6 +458,9 @@ class CalendarView {
   }
 }
 
+// ES module export
+export { CalendarView };
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { CalendarView };

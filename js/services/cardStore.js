@@ -289,7 +289,10 @@ class CardStore {
   }
 }
 
-// Export for use in other modules
+// ES module export
+export { CardStore };
+
+// CommonJS compat
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { CardStore };
 }

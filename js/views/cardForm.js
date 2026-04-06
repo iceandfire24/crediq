@@ -1139,6 +1139,9 @@ class CardFormView {
   }
 }
 
+// ES module export
+export { CardFormView };
+
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { CardFormView };
